@@ -1,5 +1,6 @@
 import json
 import os
+from src import playlist
 
 # необходимо установить через: pip install google-api-python-client
 from googleapiclient.discovery import build
@@ -11,7 +12,7 @@ api_key: str = os.getenv('YT_API_KEY')
 youtube = build('youtube', 'v3', developerKey=api_key)
 
 
-class Channel:
+class Channel(playlist.APIMixin):
     """Класс для ютуб-канала"""
 
     def __init__(self, channel_id: str) -> None:
@@ -39,12 +40,12 @@ class Channel:
         channel = youtube.channels().list(id=self.channel_id, part='id,snippet,statistics').execute()
         return channel
 
-    @classmethod
-    def get_service(cls):
-        api_service_name = "youtube"
-        api_version = "v3"
-        DEVELOPER_KEY = api_key
-        return build(api_service_name, api_version, developerKey=DEVELOPER_KEY)
+    # @classmethod
+    # def get_service(cls):
+    #     api_service_name = "youtube"
+    #     api_version = "v3"
+    #     DEVELOPER_KEY = api_key
+    #     return build(api_service_name, api_version, developerKey=DEVELOPER_KEY)
 
     def get_channel_data(self):
         request = self.service.channels().list(
